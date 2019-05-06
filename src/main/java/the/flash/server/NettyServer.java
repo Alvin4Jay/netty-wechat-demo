@@ -1,4 +1,4 @@
-package the.flash;
+package the.flash.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -38,6 +38,8 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel ch) throws Exception {
                         String clientValue = ch.attr(CLIENT_SIZE_KEY).get();
                         System.out.println("客户端Channel属性: " + clientValue);
+
+                        ch.pipeline().addLast(new FirstServerHandler());
                     }
                 })
                 .option(ChannelOption.SO_BACKLOG, 1024)
@@ -60,6 +62,7 @@ public class NettyServer {
 
     private static void bind(final ServerBootstrap serverBootstrap, final int port) {
         serverBootstrap.bind(port).addListener(new GenericFutureListener<Future<? super Void>>() {
+            @Override
             public void operationComplete(Future<? super Void> future) throws Exception {
                 if (future.isSuccess()) {
                     System.out.println("绑定端口" + port + "成功");

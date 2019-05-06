@@ -1,4 +1,4 @@
-package the.flash;
+package the.flash.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -37,6 +37,8 @@ public class NettyClient {
                     protected void initChannel(NioSocketChannel ch) throws Exception {
                         String clientName = ch.attr(CLIENT_NAME).get();
                         System.out.println("clientName: " + clientName);
+
+                        ch.pipeline().addLast(new FirstClientHandler());
                     }
                 })
                 .attr(CLIENT_NAME, "nettyClient")
