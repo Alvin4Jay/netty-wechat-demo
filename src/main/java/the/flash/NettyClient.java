@@ -44,6 +44,7 @@ public class NettyClient {
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000);
 
+        // 连接服务端
         connect(bootstrap, "127.0.0.1", 8000, MAX_RETRY);
 
     }
@@ -60,7 +61,9 @@ public class NettyClient {
                 } else if (retry == 0) {
                     System.err.println("重试次数已用完，连接失败");
                 } else {
+                    // 第几次重连
                     int order = MAX_RETRY - retry + 1;
+                    // 本次重连的间隔
                     int delay = 1 << order;
                     System.err.println(new Date() + ": 连接失败，第" + order + "次重连...");
                     bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, retry - 1), delay, TimeUnit.SECONDS);
