@@ -6,7 +6,9 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import the.flash.protocol.Packet;
 import the.flash.protocol.PacketCodec;
 import the.flash.protocol.request.LoginRequestPacket;
+import the.flash.protocol.request.MessageRequestPacket;
 import the.flash.protocol.response.LoginResponsePacket;
+import the.flash.protocol.response.MessageResponsePacket;
 
 import java.util.Date;
 
@@ -38,6 +40,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
 
             ByteBuf response = PacketCodec.INSTANCE.encode(ctx.alloc(), loginResponsePacket);
+            ctx.channel().writeAndFlush(response);
+        } else if (packet instanceof MessageRequestPacket) {
+            MessageRequestPacket messageRequestPacket = (MessageRequestPacket) packet;
+            System.out.println(new Date() + " 收到客户端消息: " + messageRequestPacket.getMessage());
+
+            MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
+            messageResponsePacket.setMessage("服务端回复 [" + messageRequestPacket.getMessage() + "]");
+
+            ByteBuf response = PacketCodec.INSTANCE.encode(ctx.alloc(), messageResponsePacket);
             ctx.channel().writeAndFlush(response);
         }
 

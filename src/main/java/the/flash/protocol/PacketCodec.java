@@ -3,7 +3,9 @@ package the.flash.protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import the.flash.protocol.request.LoginRequestPacket;
+import the.flash.protocol.request.MessageRequestPacket;
 import the.flash.protocol.response.LoginResponsePacket;
+import the.flash.protocol.response.MessageResponsePacket;
 import the.flash.serialize.Serializer;
 import the.flash.serialize.impl.JsonSerializer;
 
@@ -28,6 +30,8 @@ public class PacketCodec {
     private PacketCodec() {
         PACKET_MAP.put(LOGIN_REQUEST, LoginRequestPacket.class);
         PACKET_MAP.put(LOGIN_RESPONSE, LoginResponsePacket.class);
+        PACKET_MAP.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+        PACKET_MAP.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
 
         Serializer serializer = new JsonSerializer();
         SERIALIZER_MAP.put(serializer.getSerializerAlgorithm(), serializer);
