@@ -1,6 +1,7 @@
-package the.flash.protocol.command;
+package the.flash.protocol.request;
 
 import lombok.Data;
+import the.flash.protocol.Packet;
 
 import static the.flash.protocol.command.Command.LOGIN_REQUEST;
 
@@ -12,7 +13,7 @@ import static the.flash.protocol.command.Command.LOGIN_REQUEST;
 @Data
 public class LoginRequestPacket extends Packet {
 
-    private Integer userId;
+    private String userId;
 
     private String username;
 

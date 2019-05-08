@@ -1,14 +1,16 @@
-package the.flash.protocol.command;
+package the.flash.protocol;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import the.flash.protocol.request.LoginRequestPacket;
+import the.flash.protocol.response.LoginResponsePacket;
 import the.flash.serialize.Serializer;
 import the.flash.serialize.impl.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static the.flash.protocol.command.Command.LOGIN_REQUEST;
+import static the.flash.protocol.command.Command.*;
 
 /**
  * Packet编解码器
@@ -17,20 +19,23 @@ import static the.flash.protocol.command.Command.LOGIN_REQUEST;
  */
 public class PacketCodec {
 
+    public static final PacketCodec INSTANCE = new PacketCodec();
     private static final int MAGIC_NUMBER = 0x12345678;
-    private static final Map<Byte, Class<? extends Packet>> PACKET_MAP = new HashMap<>(16);
-    private static final Map<Byte, Serializer> SERIALIZER_MAP = new HashMap<>(16);
 
-    static {
+    private final Map<Byte, Class<? extends Packet>> PACKET_MAP = new HashMap<>(16);
+    private final Map<Byte, Serializer> SERIALIZER_MAP = new HashMap<>(16);
+
+    private PacketCodec() {
         PACKET_MAP.put(LOGIN_REQUEST, LoginRequestPacket.class);
+        PACKET_MAP.put(LOGIN_RESPONSE, LoginResponsePacket.class);
 
         Serializer serializer = new JsonSerializer();
         SERIALIZER_MAP.put(serializer.getSerializerAlgorithm(), serializer);
     }
 
-    public ByteBuf encode(Packet packet) {
+    public ByteBuf encode(ByteBufAllocator allocator, Packet packet) {
 
-        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+        ByteBuf byteBuf = allocator.ioBuffer();
 
         byte[] data = Serializer.DEFAULT.serialize(packet);
 

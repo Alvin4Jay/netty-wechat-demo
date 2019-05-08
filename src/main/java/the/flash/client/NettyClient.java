@@ -35,10 +35,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
-                        String clientName = ch.attr(CLIENT_NAME).get();
-                        System.out.println("clientName: " + clientName);
-
-                        ch.pipeline().addLast(new FirstClientHandler());
+                        ch.pipeline().addLast(new ClientHandler());
                     }
                 })
                 .attr(CLIENT_NAME, "nettyClient")

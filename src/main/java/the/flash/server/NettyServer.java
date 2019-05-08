@@ -36,10 +36,7 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
-                        String clientValue = ch.attr(CLIENT_SIZE_KEY).get();
-                        System.out.println("客户端Channel属性: " + clientValue);
-
-                        ch.pipeline().addLast(new FirstServerHandler());
+                        ch.pipeline().addLast(new ServerHandler());
                     }
                 })
                 .option(ChannelOption.SO_BACKLOG, 1024)
@@ -48,9 +45,7 @@ public class NettyServer {
                 .handler(new ChannelInitializer<NioServerSocketChannel>() {
                     @Override
                     protected void initChannel(NioServerSocketChannel ch) throws Exception {
-                        System.out.println("服务端启动中...");
-                        String serverName = ch.attr(SERVER_NAME_KEY).get();
-                        System.out.println("服务名: " + serverName);
+
                     }
                 })
                 .attr(SERVER_NAME_KEY, "netty-server")
