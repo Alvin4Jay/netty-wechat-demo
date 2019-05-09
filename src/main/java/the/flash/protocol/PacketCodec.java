@@ -37,10 +37,7 @@ public class PacketCodec {
         SERIALIZER_MAP.put(serializer.getSerializerAlgorithm(), serializer);
     }
 
-    public ByteBuf encode(ByteBufAllocator allocator, Packet packet) {
-
-        ByteBuf byteBuf = allocator.ioBuffer();
-
+    public ByteBuf encode(ByteBuf byteBuf, Packet packet) {
         byte[] data = Serializer.DEFAULT.serialize(packet);
 
         byteBuf.writeInt(MAGIC_NUMBER);

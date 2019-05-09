@@ -1,7 +1,6 @@
 package the.flash.client;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -11,7 +10,10 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import the.flash.protocol.PacketCodec;
+import the.flash.client.handler.LoginResponseHandler;
+import the.flash.client.handler.MessageResponseHandler;
+import the.flash.codec.PacketDecoder;
+import the.flash.codec.PacketEncoder;
 import the.flash.protocol.request.MessageRequestPacket;
 import the.flash.util.LoginUtil;
 
@@ -42,7 +44,10 @@ public class NettyClient {
                 .handler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new ClientHandler());
+                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(new LoginResponseHandler());
+                        ch.pipeline().addLast(new MessageResponseHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 })
                 .attr(CLIENT_NAME, "nettyClient")
@@ -86,12 +91,7 @@ public class NettyClient {
                     Scanner in = new Scanner(System.in);
                     System.out.println("输入消息发送至服务端: ");
                     String line = in.nextLine();
-
-                    MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
-                    messageRequestPacket.setMessage(line);
-
-                    ByteBuf byteBuf = PacketCodec.INSTANCE.encode(channel.alloc(), messageRequestPacket);
-                    channel.writeAndFlush(byteBuf);
+                    channel.writeAndFlush(new MessageRequestPacket(line));
                 }
             }
         }).start();
