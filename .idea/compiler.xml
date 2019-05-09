@@ -9,5 +9,8 @@
         <module name="netty-wechat-demo" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="netty-wechat-demo" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
