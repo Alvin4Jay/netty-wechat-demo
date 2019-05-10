@@ -12,6 +12,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 import the.flash.codec.PacketDecoder;
 import the.flash.codec.PacketEncoder;
 import the.flash.codec.Spliter;
+import the.flash.server.handler.LifeCyCleTestHandler;
 import the.flash.server.handler.LoginRequestHandler;
 import the.flash.server.handler.MessageRequestHandler;
 
@@ -42,6 +43,7 @@ public class NettyServer {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
                         ch.pipeline().addLast(new Spliter());
+                        ch.pipeline().addLast(new LifeCyCleTestHandler());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
