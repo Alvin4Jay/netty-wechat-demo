@@ -10,14 +10,15 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import the.flash.client.console.ConsoleCommandManager;
+import the.flash.client.console.LoginConsoleCommand;
+import the.flash.client.handler.CreateGroupResponseHandler;
 import the.flash.client.handler.LoginResponseHandler;
 import the.flash.client.handler.LogoutResponseHandler;
 import the.flash.client.handler.MessageResponseHandler;
 import the.flash.codec.PacketDecoder;
 import the.flash.codec.PacketEncoder;
 import the.flash.codec.Spliter;
-import the.flash.protocol.request.LoginRequestPacket;
-import the.flash.protocol.request.MessageRequestPacket;
 import the.flash.util.SessionUtil;
 
 import java.util.Date;
@@ -52,6 +53,7 @@ public class NettyClient {
                         ch.pipeline().addLast(new LoginResponseHandler());
                         ch.pipeline().addLast(new LogoutResponseHandler());
                         ch.pipeline().addLast(new MessageResponseHandler());
+                        ch.pipeline().addLast(new CreateGroupResponseHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 })
@@ -91,35 +93,18 @@ public class NettyClient {
 
     private static void startConsoleThread(Channel channel) {
         Scanner sc = new Scanner(System.in);
+        ConsoleCommandManager consoleCommandManager = new ConsoleCommandManager();
+        LoginConsoleCommand loginConsoleCommand = new LoginConsoleCommand();
 
         new Thread(() -> {
             while (!Thread.interrupted()) {
                 if (!SessionUtil.hasLogin(channel)) {
-                    System.out.print("请输入用户名登录: ");
-                    String username = sc.nextLine();
-
-                    LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-                    loginRequestPacket.setUsername(username);
-                    loginRequestPacket.setPassword("pwd");
-
-                    channel.writeAndFlush(loginRequestPacket);
-
-                    waitForLoginResponse();
+                    loginConsoleCommand.exec(sc, channel);
                 } else {
-                    String toUserId = sc.next();
-                    String message = sc.next();
-                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                    consoleCommandManager.exec(sc, channel);
                 }
             }
         }).start();
-    }
-
-    private static void waitForLoginResponse() {
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 }

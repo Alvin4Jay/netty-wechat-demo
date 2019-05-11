@@ -5,10 +5,10 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import the.flash.protocol.request.LoginRequestPacket;
 import the.flash.protocol.response.LoginResponsePacket;
 import the.flash.session.Session;
+import the.flash.util.IDUtil;
 import the.flash.util.SessionUtil;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * 登录请求处理
@@ -25,7 +25,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
 
         // 校验
         if (valid(loginRequestPacket)) {
-            String userId = randomUserId();
+            String userId = IDUtil.randomId();
             SessionUtil.bindSession(new Session(userId, username), ctx.channel());
 
             loginResponsePacket.setSuccess(true);
@@ -37,10 +37,6 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             System.out.println(new Date() + ": 登录失败!");
         }
         ctx.channel().writeAndFlush(loginResponsePacket);
-    }
-
-    private static String randomUserId() {
-        return UUID.randomUUID().toString().split("-")[0];
     }
 
     private boolean valid(LoginRequestPacket loginRequestPacket) {

@@ -1,9 +1,11 @@
 package the.flash.protocol;
 
 import io.netty.buffer.ByteBuf;
+import the.flash.protocol.request.CreateGroupRequestPacket;
 import the.flash.protocol.request.LoginRequestPacket;
 import the.flash.protocol.request.LogoutRequestPacket;
 import the.flash.protocol.request.MessageRequestPacket;
+import the.flash.protocol.response.CreateGroupResponsePacket;
 import the.flash.protocol.response.LoginResponsePacket;
 import the.flash.protocol.response.LogoutResponsePacket;
 import the.flash.protocol.response.MessageResponsePacket;
@@ -35,6 +37,8 @@ public class PacketCodec {
         PACKET_MAP.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
         PACKET_MAP.put(LOGOUT_REQUEST, LogoutRequestPacket.class);
         PACKET_MAP.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
+        PACKET_MAP.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+        PACKET_MAP.put(CREATE_GROUP__RESPONSE, CreateGroupResponsePacket.class);
 
         Serializer serializer = new JsonSerializer();
         SERIALIZER_MAP.put(serializer.getSerializerAlgorithm(), serializer);

@@ -1,6 +1,7 @@
 package the.flash.util;
 
 import io.netty.channel.Channel;
+import io.netty.channel.group.ChannelGroup;
 import io.netty.util.Attribute;
 import the.flash.attribute.Attributes;
 import the.flash.session.Session;
@@ -14,8 +15,10 @@ import java.util.concurrent.ConcurrentMap;
  * @author xuanjian
  */
 public class SessionUtil {
-
+    /*userId--channel*/
     private static final ConcurrentMap<String, Channel> USER_ID_CHANNEL_MAP = new ConcurrentHashMap<>();
+    /*groupId--channelGroup*/
+    private static final ConcurrentMap<String, ChannelGroup> CHANNEL_GROUP_MAP = new ConcurrentHashMap<>();
 
     public static void bindSession(Session session, Channel channel) {
         USER_ID_CHANNEL_MAP.put(session.getUserId(), channel);

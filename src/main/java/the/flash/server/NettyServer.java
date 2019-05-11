@@ -12,10 +12,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 import the.flash.codec.PacketDecoder;
 import the.flash.codec.PacketEncoder;
 import the.flash.codec.Spliter;
-import the.flash.server.handler.AuthHandler;
-import the.flash.server.handler.LoginRequestHandler;
-import the.flash.server.handler.LogoutRequestHandler;
-import the.flash.server.handler.MessageRequestHandler;
+import the.flash.server.handler.*;
 
 /**
  * Netty Server
@@ -48,6 +45,7 @@ public class NettyServer {
                         ch.pipeline().addLast(new LoginRequestHandler());
                         ch.pipeline().addLast(new AuthHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
+                        ch.pipeline().addLast(new CreateGroupRequestHandler());
                         ch.pipeline().addLast(new LogoutRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
