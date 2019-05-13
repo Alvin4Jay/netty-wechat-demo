@@ -1,5 +1,6 @@
 package the.flash.server.handler;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import the.flash.protocol.request.LoginRequestPacket;
@@ -15,7 +16,14 @@ import java.util.Date;
  *
  * @author <a href="mailto:xuanjian@wacai.com">xuanjian</a>
  */
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
+
+    private LoginRequestHandler() {
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket loginRequestPacket) throws Exception {
         LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
@@ -36,7 +44,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             loginResponsePacket.setReason("用户名密码校验失败");
             System.out.println(new Date() + ": 登录失败!");
         }
-        ctx.channel().writeAndFlush(loginResponsePacket);
+        ctx.writeAndFlush(loginResponsePacket);
     }
 
     private boolean valid(LoginRequestPacket loginRequestPacket) {
