@@ -20,4 +20,10 @@ public class Session {
         this.userId = userId;
         this.username = username;
     }
+
+    @Override
+    public String toString() {
+        return userId + ":" + username;
+    }
+
 }

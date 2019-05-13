@@ -23,4 +23,16 @@ public interface Command {
 
     Byte CREATE_GROUP__RESPONSE = 8;
 
+    Byte JOIN_GROUP_REQUEST = 9;
+
+    Byte JOIN_GROUP__RESPONSE = 10;
+
+    Byte QUIT_GROUP_REQUEST = 11;
+
+    Byte QUIT_GROUP__RESPONSE = 12;
+
+    Byte LIST_GROUP_MEMBERS_REQUEST = 13;
+
+    Byte LIST_GROUP_MEMBERS_RESPONSE = 14;
+
 }

@@ -45,4 +45,12 @@ public class SessionUtil {
         return USER_ID_CHANNEL_MAP.get(userId);
     }
 
+    public static void bindChannelGroup(String groupId, ChannelGroup channelGroup) {
+        CHANNEL_GROUP_MAP.put(groupId, channelGroup);
+    }
+
+    public static ChannelGroup getChannelGroup(String groupId) {
+        return CHANNEL_GROUP_MAP.get(groupId);
+    }
+
 }

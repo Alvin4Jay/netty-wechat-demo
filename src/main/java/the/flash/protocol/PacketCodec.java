@@ -1,14 +1,8 @@
 package the.flash.protocol;
 
 import io.netty.buffer.ByteBuf;
-import the.flash.protocol.request.CreateGroupRequestPacket;
-import the.flash.protocol.request.LoginRequestPacket;
-import the.flash.protocol.request.LogoutRequestPacket;
-import the.flash.protocol.request.MessageRequestPacket;
-import the.flash.protocol.response.CreateGroupResponsePacket;
-import the.flash.protocol.response.LoginResponsePacket;
-import the.flash.protocol.response.LogoutResponsePacket;
-import the.flash.protocol.response.MessageResponsePacket;
+import the.flash.protocol.request.*;
+import the.flash.protocol.response.*;
 import the.flash.serialize.Serializer;
 import the.flash.serialize.impl.JsonSerializer;
 
@@ -39,6 +33,12 @@ public class PacketCodec {
         PACKET_MAP.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
         PACKET_MAP.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
         PACKET_MAP.put(CREATE_GROUP__RESPONSE, CreateGroupResponsePacket.class);
+        PACKET_MAP.put(JOIN_GROUP_REQUEST, JoinGroupRequestPacket.class);
+        PACKET_MAP.put(JOIN_GROUP__RESPONSE, JoinGroupResponsePacket.class);
+        PACKET_MAP.put(QUIT_GROUP_REQUEST, QuitGroupRequestPacket.class);
+        PACKET_MAP.put(QUIT_GROUP__RESPONSE, QuitGroupResponsePacket.class);
+        PACKET_MAP.put(LIST_GROUP_MEMBERS_REQUEST, ListGroupMembersRequestPacket.class);
+        PACKET_MAP.put(LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
 
         Serializer serializer = new JsonSerializer();
         SERIALIZER_MAP.put(serializer.getSerializerAlgorithm(), serializer);
